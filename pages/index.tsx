@@ -3,16 +3,27 @@ import type { NextPage } from 'next';
 const Home: NextPage = () => {
   return (
     <div className="bg-slate-300 p-10  flex flex-col space-y-5 max-w-md min-h-screen">
-      <div className="bg-white p-10 rounded-lg">
+      <div className="bg-white p-10 rounded-lg group">
         <span className="font-semibold text-2xl">Select Item</span>
-        <div className="flex justify-between my-2">
-          <span className="text-gray-400 ">Grey Chair</span>
-          <span>$19</span>
-        </div>
-        <div className="flex justify-between my-2">
-          <span className="text-gray-400 ">Grey Chair2</span>
-          <span>$13</span>
-        </div>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <div
+            key={i}
+            className="flex justify-between my-2 first:bg-blue-300 even:bg-blue-300 group-hover:bg-blue-300"
+          >
+            <span className="text-gray-400 ">Grey Chair</span>
+            <span>$19</span>
+          </div>
+        ))}
+
+        {['a', 'b', 'c', ''].map((i) => (
+          <div
+            key={i}
+            className="bg-amber-600 py-2 empty:bg-blue-500 first:bg-blue-500 odd:bg-black"
+          >
+            {i}
+          </div>
+        ))}
+
         <div className=" flex justify-between border-t-2 border-dashed">
           <span>Total</span>
           <span>$130</span>
@@ -21,7 +32,7 @@ const Home: NextPage = () => {
           Checkout
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden group">
         <div className="bg-blue-600 p-6">
           <span className="text-white text-2xl">Profile</span>
         </div>
@@ -31,7 +42,7 @@ const Home: NextPage = () => {
               <span className="text-sm text-gray-500">Orders</span>
               <span className="font-semibold">340</span>
             </div>
-            <div className="h-24 w-24 bg-red-300 rounded-full"></div>
+            <div className="h-24 w-24 bg-green-300 rounded-full group-hover:bg-red-300"></div>
             <div className="flex flex-col items-center">
               <span>Spent</span>
               <span>$2,310</span>
@@ -39,7 +50,7 @@ const Home: NextPage = () => {
           </div>
           <div className="flex flex-col items-center">
             <span className="font-bold">Tony Molloy</span>
-            <span>미국국</span>
+            <span>미국</span>
           </div>
         </div>
       </div>
@@ -60,9 +71,9 @@ const Home: NextPage = () => {
           <span className="text-xs text-gray-500">Chair</span>
           <div className="mt-3 mb-5 flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <button className="w-5 h-5 rounded-full bg-yellow-500"></button>
-              <button className="w-5 h-5 rounded-full bg-indigo-500"></button>
-              <button className="w-5 h-5 rounded-full bg-teal-500"></button>
+              <button className="w-5 h-5 rounded-full bg-yellow-500 focus:ring ring-yellow-500 ring-offset-2"></button>
+              <button className="w-5 h-5 rounded-full bg-indigo-500 focus:ring ring-indigo-500 ring-offset-2"></button>
+              <button className="w-5 h-5 rounded-full bg-teal-500 focus:ring ring-teal-500 ring-offset-2"></button>
             </div>
             <div className="flex items-center space-x-3">
               <button className=" bg-blue-400 font-bold text-white w-10 aspect-square rounded-md text-xl hover:bg-blue-700 active:bg-teal-500 ease-in-out duration-300">
@@ -83,7 +94,33 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      <div className="bg-white p-10 rounded-lg"></div>
+      <div className="bg-blue-300 p-10 rounded-lg focus-within:bg-blue-100">
+        <form action="" className="flex flex-col space-y-2">
+          <input
+            type="text"
+            placeholder="your ID"
+            className="placeholder-shown:bg-teal-300"
+          />
+          <input type="password" placeholder="your password" />
+          <input type="submit" value="submit" className="bg-white" />
+        </form>
+
+        <form
+          action=""
+          className="flex flex-col space-y-2 mt-5 p-5 border-2 border-amber-200"
+        >
+          <input
+            type="text"
+            required
+            placeholder="your ID"
+            className="placeholder-shown:bg-teal-300 peer"
+          />
+          <span className="hidden peer-invalid:block peer-invalid:text-red-500">
+            this input is invalid{' '}
+          </span>
+          <input type="submit" value="submit" className="bg-white" />
+        </form>
+      </div>
     </div>
   );
 };
