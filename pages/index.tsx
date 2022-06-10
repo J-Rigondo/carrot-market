@@ -2,13 +2,13 @@ import type { NextPage } from 'next';
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-slate-300 p-10  flex flex-col space-y-5 max-w-md min-h-screen">
+    <div className="bg-slate-300 p-10 grid gap-10 space-y-5 md:grid-cols-2 lg:grid-cols-3">
       <div className="bg-white p-10 rounded-lg group">
         <span className="font-semibold text-2xl">Select Item</span>
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className="flex justify-between my-2 first:bg-blue-300 even:bg-blue-300 group-hover:bg-blue-300"
+            className="flex justify-between my-2 first:bg-blue-300 group-hover:bg-blue-300"
           >
             <span className="text-gray-400 ">Grey Chair</span>
             <span>$19</span>
@@ -120,6 +120,18 @@ const Home: NextPage = () => {
           </span>
           <input type="submit" value="submit" className="bg-white" />
         </form>
+      </div>
+
+      <div className="bg-white rounded-lg">
+        <details>
+          <summary className="cursor-pointer">what is my fav food</summary>
+          <span className="selection:bg-indigo-300">beef</span>
+        </details>
+        <input
+          type="file"
+          className="file:transition-colors file:cursor-pointer file:hover:text-purple-500
+           file:hover:bg-white file:rounded-lg file:text-white file:bg-teal-500"
+        />
       </div>
     </div>
   );
