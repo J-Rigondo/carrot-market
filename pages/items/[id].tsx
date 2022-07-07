@@ -41,7 +41,7 @@ const ItemDetail: NextPage = () => {
 
     if (!data) return;
 
-    mutate({ ...data, isLiked: !data.isLiked }, false);
+    mutate({ ...data, isLiked: !data.isLiked }, false); //opts-> 재조회 여부
   };
 
   return (
