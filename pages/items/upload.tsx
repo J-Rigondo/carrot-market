@@ -3,11 +3,42 @@ import { NextPage } from 'next';
 import Button from 'components/base/Button';
 import TextArea from 'components/base/TextArea';
 import Input from 'components/base/Input';
+import { useForm } from 'react-hook-form';
+import useMutation from 'libs/client/useMutation';
+import { Product } from '@prisma/client';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
+interface IUploadForm {
+  name: string;
+  price: string;
+  description: string;
+}
+
+interface UploadProductMutation {
+  ok: boolean;
+  item: Product;
+}
 
 const Upload: NextPage = () => {
+  const router = useRouter();
+  const { register, handleSubmit } = useForm<IUploadForm>();
+  const [uploadProduct, { loading, data }] =
+    useMutation<UploadProductMutation>('/api/items');
+  const onValid = (data: IUploadForm) => {
+    if (loading) return; //prevent repetitive click
+    uploadProduct(data);
+  };
+
+  useEffect(() => {
+    if (data?.ok) {
+      router.push(`/items/${data.item.id}`);
+    }
+  }, [data, router]);
+
   return (
     <Layout canGoBack title="Upload Product">
-      <form className="p-4 space-y-4 mt-5">
+      <form className="p-4 space-y-4 mt-5" onSubmit={handleSubmit(onValid)}>
         <div>
           <label className="w-full cursor-pointer text-gray-600 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
             <svg
@@ -27,8 +58,15 @@ const Upload: NextPage = () => {
             <input className="hidden" type="file" />
           </label>
         </div>
-        <Input required label="Name" name="name" type="text" />
         <Input
+          register={register('name', { required: true })}
+          required
+          label="Name"
+          name="name"
+          type="text"
+        />
+        <Input
+          register={register('price', { required: true })}
           required
           label="Price"
           placeholder="0.00"
@@ -36,8 +74,12 @@ const Upload: NextPage = () => {
           type="text"
           kind="price"
         />
-        <TextArea name="description" label="Description" />
-        <Button text="Upload item" />
+        <TextArea
+          register={register('description', { required: true })}
+          name="description"
+          label="Description"
+        />
+        <Button text={loading ? 'Loading...' : 'Upload item'} />
       </form>
     </Layout>
   );
