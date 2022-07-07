@@ -161,7 +161,7 @@ id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId    Int
     name String
-    descript String @db.MediumText
+    description String @db.MediumText
     price Int
     messages Message[]
 }
