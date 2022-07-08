@@ -22,6 +22,20 @@ async function handler(
     where: {
       id: +id,
     },
+    include: {
+      messages: {
+        select: {
+          id: true,
+          message: true,
+          user: {
+            select: {
+              id: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   res.json({

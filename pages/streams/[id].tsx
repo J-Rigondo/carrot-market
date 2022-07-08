@@ -6,30 +6,74 @@ import { useRouter } from 'next/router';
 import { Stream } from '@prisma/client';
 import { useForm } from 'react-hook-form';
 import useMutation from 'libs/client/useMutation';
+import useUser from 'libs/client/useUser';
+import { useEffect } from 'react';
+
+interface IMessage {
+  message: string;
+  id: number;
+  user: {
+    id: number;
+    avatar?: string;
+  };
+}
+
+interface IStream extends Stream {
+  messages: IMessage[];
+}
 
 interface IStreamResponse {
   ok: true;
-  stream: Stream;
+  stream: IStream;
 }
 
 interface IMessageForm {
   message: string;
 }
 
-const Stream: NextPage = () => {
+const StreamPage: NextPage = () => {
   const router = useRouter();
-  const { data } = useSWR<IStreamResponse>(
+  const { user } = useUser();
+  const { data, mutate } = useSWR<IStreamResponse>(
     router.query.id ? `/api/streams/${router.query.id}` : null,
+    { refreshInterval: 3000 },
   );
   const [sendMessage, { loading, data: sendMessageData }] = useMutation(
     `/api/streams/${router.query.id}/message`,
   );
   const { register, handleSubmit, reset } = useForm<IMessageForm>();
 
+  // useEffect(() => {
+  //   if (sendMessageData && sendMessageData.ok) {
+  //     mutate();
+  //   }
+  // }, [sendMessageData, mutate]);
+
   const onValid = (form: IMessageForm) => {
     if (loading) return;
     reset();
-    sendMessage(form);
+    mutate(
+      (prev) =>
+        (prev && {
+          ...prev,
+          stream: {
+            ...prev.stream,
+            messages: [
+              ...prev.stream.messages,
+              {
+                id: Date.now(),
+                message: form.message,
+                user: {
+                  id: user?.id,
+                  avatar: user?.avatar,
+                },
+              },
+            ],
+          },
+        }) as any,
+      false,
+    );
+    //sendMessage(form);
   };
 
   return (
@@ -48,9 +92,13 @@ const Stream: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Live Chat</h2>
           <div className="py-10 pb-16 h-[50vh] overflow-y-scroll  px-4 space-y-4">
-            <Message message="Hi how much are you selling them for?" />
-            <Message message="I want ￦20,000" reversed />
-            <Message message="미쳤어" />
+            {data?.stream.messages.map((message) => (
+              <Message
+                key={message.id}
+                message={message.message}
+                reversed={message.user.id === user?.id}
+              />
+            ))}
           </div>
           <div className="fixed py-2 bg-white  bottom-0 inset-x-0">
             <form
@@ -75,4 +123,4 @@ const Stream: NextPage = () => {
   );
 };
 
-export default Stream;
+export default StreamPage;
