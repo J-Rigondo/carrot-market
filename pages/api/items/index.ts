@@ -13,7 +13,7 @@ async function handler(
   res: NextApiResponse<IResponseType>,
 ) {
   const {
-    body: { name, price, description },
+    body: { name, price, description, photoId },
     session: { user },
   } = req;
 
@@ -42,7 +42,7 @@ async function handler(
           name,
           price: +price,
           description,
-          imageUrl: 'ee',
+          imageUrl: photoId,
           user: {
             connect: {
               id: user?.id,
@@ -53,6 +53,8 @@ async function handler(
     } catch (e) {
       console.log(e);
     }
+
+    console.log(item);
 
     res.json({
       ok: true,
