@@ -14,9 +14,10 @@ async function handler(
 ) {
   const {
     session: { user },
-    body: { email, phone },
+    body: { email, phone, avatar },
   } = req;
 
+  console.log('avatar', avatar);
   if (req.method === 'GET') {
     const profile = await client.user.findUnique({
       where: {
@@ -62,9 +63,8 @@ async function handler(
           email,
         },
       });
-
-      res.json({ ok: true });
     }
+
     if (phone && phone !== currentUser?.phone) {
       const findId = await client.user.findUnique({
         where: {
@@ -90,13 +90,21 @@ async function handler(
           phone,
         },
       });
+    }
 
-      res.json({ ok: true });
+    if (avatar) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          avatar: avatar.id,
+        },
+      });
     }
 
     res.json({
       ok: true,
-      message: 'nothing update',
     });
   }
 }
