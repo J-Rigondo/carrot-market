@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import withHandler from 'libs/server/withHandler';
 import client from 'libs/server/client';
 import { withSession } from 'libs/server/withSession';
-import { algorithms } from '@hapi/iron';
 
 interface IResponseType {
   ok: boolean;
@@ -18,25 +17,52 @@ async function handler(
     query: { id },
   } = req;
 
-  const stream = await client.stream.findUnique({
+  const findStreamUser = await client.stream.findUnique({
     where: {
       id: +id,
     },
-    include: {
-      messages: {
-        select: {
-          id: true,
-          message: true,
-          user: {
-            select: {
-              id: true,
-              avatar: true,
+    select: {
+      userId: true,
+    },
+  });
+
+  const isOwner = findStreamUser?.userId === user?.id;
+
+  let stream;
+
+  try {
+    stream = await client.stream.findUnique({
+      where: {
+        id: +id,
+      },
+      select: {
+        id: true,
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
+        name: true,
+        description: true,
+        price: true,
+        cloudflareId: isOwner,
+        cloudflareUrl: isOwner,
+        cloudflareKey: isOwner,
+        messages: {
+          select: {
+            id: true,
+            message: true,
+            user: {
+              select: {
+                id: true,
+                avatar: true,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   res.json({
     ok: true,
