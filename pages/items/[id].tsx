@@ -69,7 +69,7 @@ const ItemDetail: NextPage = () => {
               <p className="text-sm font-medium text-gray-700">
                 {data?.item?.user?.name}
               </p>
-              <Link href={`/users/${data?.item?.user?.id}`}>
+              <Link href="/profile/edit">
                 <a className="text-xs font-medium text-gray-500">
                   View profile &rarr;
                 </a>
