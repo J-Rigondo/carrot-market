@@ -27,14 +27,21 @@ const client =
     ],
   });
 
-if (process.env.NODE_ENV === 'development') {
+if (!global.client) {
   global.client = client;
-}
 
-client.$on('query' as any, (e: any) => {
-  console.log('Query: ' + e.query);
-  console.log('Params: ' + e.params);
-  console.log('Duration: ' + e.duration + 'ms');
-});
+  client.$on('query' as any, (e: any) => {
+    console.log('Query: ' + e.query);
+    console.log('Params: ' + e.params);
+    console.log('Duration: ' + e.duration + 'ms');
+  });
+
+  client.$use(async (params, next) => {
+    console.log(params);
+    console.log(next);
+
+    return next(params);
+  });
+}
 
 export default client;
