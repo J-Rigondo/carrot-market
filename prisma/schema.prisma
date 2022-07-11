@@ -164,6 +164,9 @@ id        Int      @id @default(autoincrement())
     description String @db.MediumText
     price Int
     messages Message[]
+    cloudflareId String
+    cloudflareUrl String
+    cloudflareKey String
 }
 
 model Message {
