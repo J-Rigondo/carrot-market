@@ -42,6 +42,9 @@ model Token {
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+    @@index([userId])
+
 }
 
 model Product {
@@ -58,6 +61,8 @@ model Product {
   sales       Sale[]
   purchases   Purchase[]
   record      Record[]
+
+  @@index([userId])
 }
 
 model Fav {
@@ -68,6 +73,10 @@ model Fav {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+
+    @@index([userId])
+    @@index([productId])
+
 }
 
 model Post {
@@ -81,6 +90,9 @@ model Post {
   wonderings Wondering[]
   latitude   Float?
   longitude  Float?
+
+    @@index([userId])
+
 }
 
 model Answer {
@@ -93,6 +105,10 @@ model Answer {
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
 
+    @@index([userId])
+    @@index([postId])
+
+
 }
 
 model Wondering {
@@ -103,6 +119,10 @@ model Wondering {
   userId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int
+
+      @@index([userId])
+      @@index([postId])
+
 }
 
 model Review {
@@ -115,6 +135,10 @@ model Review {
   createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdForId Int
   score Int @default(0)
+
+        @@index([createdById])
+        @@index([createdForId])
+
 }
 
 model Sale {
@@ -125,6 +149,10 @@ model Sale {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+
+      @@index([userId])
+      @@index([productId])
+
 }
 
 model Purchase {
@@ -135,6 +163,10 @@ model Purchase {
   userId    Int
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
+
+        @@index([userId])
+        @@index([productId])
+
 }
 
 model Record {
@@ -146,6 +178,10 @@ model Record {
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId Int
   kind      Kind
+
+        @@index([userId])
+        @@index([productId])
+
 }
 
 enum Kind {
@@ -167,6 +203,9 @@ id        Int      @id @default(autoincrement())
     cloudflareId String
     cloudflareUrl String
     cloudflareKey String
+
+          @@index([userId])
+
 }
 
 model Message {
@@ -178,4 +217,8 @@ id        Int      @id @default(autoincrement())
     message String @db.MediumText
     stream Stream @relation(fields:[streamId], references: [id], onDelete: Cascade)
     streamId Int
+
+          @@index([userId])
+          @@index([streamId])
+
 }
