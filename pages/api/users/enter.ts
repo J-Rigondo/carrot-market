@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import client from 'libs/server/client';
 import withHandler from 'libs/server/withHandler';
 import { v4 as uuidv4 } from 'uuid';
-import twilio from 'twilio';
 
 interface IResponseType {
   ok: boolean;
