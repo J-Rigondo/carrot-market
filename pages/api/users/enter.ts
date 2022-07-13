@@ -9,9 +9,9 @@ interface IResponseType {
   [key: string]: any;
 }
 
-const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN, {
-  logLevel: 'debug',
-});
+// const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN, {
+//   logLevel: 'debug',
+// });
 
 async function handler(
   req: NextApiRequest,
